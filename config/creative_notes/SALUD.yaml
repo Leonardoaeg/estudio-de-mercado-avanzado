@@ -1,0 +1,16 @@
+# Manually-curated "estructura del creativo" notes — REQUIRES a human/analyst to actually
+# look at the ad (video/image). See config/creative_notes/TEXTIL.yaml for the full format
+# explanation. Reviewed 2026-08-14 (first batch — top brands by active ad count).
+#
+# 2026-08-14 update: removed the serenium.co and sowicolombia.myshopify.com entries —
+# both accounts were later caught by the multi-vendor-affiliate filter added during the
+# SUPLEMENTOS pass (each ran identical ad copy landing on several unrelated store domains,
+# e.g. Sowi Colombia touched amaria.com.co, biosmedic.com, luxubuystore.myshopify.com...),
+# so they no longer appear as "small independent store" references in the built library.
+
+serenivida.co:
+  video: >-
+    Mujer sentada sosteniendo su propio pie con ambas manos (postura de "dolor/molestia"),
+    ropa deportiva, ambiente hogareño con planta de fondo. Sin diálogo a cámara visible en
+    el frame capturado. Marca de agua del logo superpuesta. El copy (dolor de talón /
+    espolón calcáneo) va en el texto del post, no como texto sobre el video.

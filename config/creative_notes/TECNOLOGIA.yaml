@@ -1,0 +1,24 @@
+# Manually-curated "estructura del creativo" notes — REQUIRES a human/analyst to actually
+# look at the ad (video/image). See config/creative_notes/TEXTIL.yaml for the full format
+# explanation. Reviewed 2026-08-14 (first batch — top brands by active ad count).
+
+c6ac4e.myshopify.com:
+  video: >-
+    Formato "mystery box / caja sorpresa": persona (rostro visible, sonriente) en ambiente
+    de bodega/tienda con estanterías de fondo, sosteniendo una caja de regalo. Texto
+    superpuesto en pantalla ("Caja sorpresa 7 a 10 productos tecnología $125.000"). Estilo
+    presentador de tienda, no UGC casero — se ve claramente que es personal del negocio.
+
+coronitatienda.com:
+  video: >-
+    Demo de producto solo con manos (sin rostro): instalación del soporte magnético para
+    celular sobre una mesa/escritorio ambientado como interior de carro de noche (luces
+    bokeh de fondo). Ritmo lento, foco 100% en cómo se instala el producto — típico de
+    gadgets pequeños donde el "cómo se usa" es el argumento de venta.
+
+importadoraneiva.com:
+  video: >-
+    Copy en primera persona estilo testimonio ("No sabía cuánto necesitaba esta cámara
+    hasta que la probé... la instalé en mi sala"), sobre video de la cámara instalada en un
+    ambiente doméstico oscuro/tenue, con texto superpuesto repetido "GRATIS GRATIS GRATIS"
+    en la parte inferior. Combina prueba social (testimonio) con oferta urgente.

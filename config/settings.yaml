@@ -1,0 +1,48 @@
+# Global runtime settings for Ecommerce Creative Intelligence (ECI)
+
+market: CO                      # default market/country code (configurable per-run via --market)
+supported_markets:
+  - CO
+  - MX
+  - PE
+  - EC
+  - CL
+  - AR
+  - US
+  - ES
+
+minimum_active_ads: 50          # threshold to qualify an advertiser as "high presence" (configurable)
+ecommerce_score_minimum: 70     # recommended cutoff for ranking inclusion (section 4)
+
+http:
+  timeout_seconds: 15
+  max_retries: 3
+  backoff_base_seconds: 1.5
+  backoff_max_seconds: 30
+  jitter_seconds: 0.75
+  user_agent: "ECI-Research-Agent/0.1 (+contact: research@local; respectful crawler; robots.txt aware)"
+  cache_dir: data/cache
+  cache_ttl_seconds: 21600       # 6h
+
+playwright:
+  headless: true
+  navigation_timeout_ms: 30000
+  slow_mo_ms: 0
+
+database:
+  url: "sqlite:///data/eci.db"    # override with ECI_DATABASE_URL env var; Postgres DSN also accepted
+
+pagination:
+  max_pages_per_source: 200
+  page_size: 100
+
+# Longevity reference window requested by the operator: treat ads older than 30 days, within a
+# 30-90 day window, as the strongest available proxy of sustained (not just launched) advertising
+# activity. Ads <30d are "recent/testing", ads >90d are tracked but flagged as long-tail outliers.
+longevity_reference_window:
+  min_age_days: 30
+  max_age_days: 90
+
+logging:
+  level: INFO
+  dir: data/cache/logs

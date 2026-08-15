@@ -1,0 +1,62 @@
+# Niche → subniche taxonomy. Subniches listed here are seeds; the discovery engine
+# (src/eci/discovery/keyword_engine.py) expands beyond this list automatically and
+# records newly discovered subniches with a classification_confidence.
+
+TEXTIL:
+  label: "Textil"
+  subniches:
+    - vestidos
+    - enterizos
+    - conjuntos
+    - jeans
+    - chaquetas
+    - shapewear
+    - activewear
+    - ropa_masculina
+    - ropa_interior
+    - blusas
+
+SALUD:
+  label: "Salud"
+  subniches:
+    - dolor_articular
+    - circulacion
+    - postura
+    - sueno
+    - digestion
+    - dispositivos_medicos
+    - ortopedia
+    - bienestar_general
+
+TECNOLOGIA:
+  label: "Tecnología"
+  subniches:
+    - audio
+    - wearables
+    - hogar_inteligente
+    - accesorios_movil
+    - gadgets
+    - iluminacion
+    - camaras
+
+BELLEZA:
+  label: "Belleza"
+  subniches:
+    - skincare
+    - cabello
+    - maquillaje
+    - cuidado_corporal
+    - herramientas_beauty
+    - fragancias
+
+SUPLEMENTOS:
+  label: "Suplementos"
+  subniches:
+    - vitaminas
+    - colageno
+    - creatina
+    - digestion
+    - energia
+    - sueno
+    - deporte
+    - perdida_de_peso

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tienda Ejemplo</title>
+  <link rel="stylesheet" href="https://cdn.shopify.com/s/files/1/0000/0000/t/1/assets/theme.css">
+  <script src="https://cdn.shopify.com/s/files/1/0000/0000/t/1/assets/theme.js"></script>
+  <script>
+    window.Shopify = window.Shopify || {};
+    Shopify.theme = {"name": "Dawn"};
+    window.ShopifyAnalytics = {lib: {}};
+  </script>
+</head>
+<body class="template-index">
+  <div class="shopify-section shopify-section-header">Header</div>
+  <div class="product-grid">
+    <div class="product-card">Vestido A - $89.900 COP <button class="add-to-cart">Añadir al carrito</button></div>
+    <div class="product-card">Vestido B - $99.900 COP <button class="add-to-cart">Añadir al carrito</button></div>
+    <div class="product-card">Vestido C - $79.900 COP <button class="add-to-cart">Añadir al carrito</button></div>
+  </div>
+  <a href="/cart">Ver carrito</a>
+  <p>Envío gratis a todo el país. Pago contra entrega disponible. Garantía de devolución 30 días.</p>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Product", "name": "Vestido A", "offers": {"price": "89900"}}
+  </script>
+</body>
+</html>

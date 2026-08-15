@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ECI — {{ niche }} ({{ market }})</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #fafafa; --surface: #ffffff; --text: #1a1a1a; --muted: #6b7280;
+    --border: #e2e5ea; --accent: #2b6cb0; --accent-soft: #eef3fa;
+    --good: #1a7f43; --good-bg: #e6f6ec;
+    --warn: #b7791f; --warn-bg: #fdf3d9;
+    --bad: #b42318; --bad-bg: #fbeae8;
+    --neutral-bg: #eef0f3;
+    --quote-bg: #fff8e1; --quote-border: #f0ad4e;
+    --code-bg: #eef0f3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14161a; --surface: #1b1e24; --text: #e8e8e8; --muted: #9aa1ac;
+      --border: #2d323b; --accent: #7fb0e8; --accent-soft: #1e2733;
+      --good: #4ade80; --good-bg: #133622;
+      --warn: #facc15; --warn-bg: #3a2f0c;
+      --bad: #f87171; --bad-bg: #3a1616;
+      --neutral-bg: #262a31;
+      --quote-bg: #2a2410; --quote-border: #caa53d;
+      --code-bg: #22262d;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    max-width: 1080px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem;
+    line-height: 1.6; color: var(--text); background: var(--bg);
+  }
+  h1 {
+    font-size: 1.75rem; margin-bottom: .3rem; padding-bottom: .6rem;
+    border-bottom: 3px solid var(--accent);
+  }
+  h1 + p { color: var(--muted); font-size: .92rem; margin-top: .4rem; }
+  h2 {
+    font-size: 1.2rem; margin-top: 2.6rem; margin-bottom: 1rem;
+    padding: .5rem .8rem; background: var(--accent-soft); color: var(--accent);
+    border-radius: 8px;
+  }
+  h3 {
+    margin-top: 1.8rem; padding-top: 1.2rem; border-top: 1px solid var(--border);
+    font-size: 1.05rem;
+  }
+  .report-table-wrap { overflow-x: auto; margin: .8rem 0 1.6rem; border-radius: 8px; border: 1px solid var(--border); }
+  table { border-collapse: collapse; width: 100%; font-size: .9rem; background: var(--surface); }
+  th, td { padding: .55rem .8rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td:nth-child(2), th:nth-child(2) { white-space: normal; }
+  th { background: var(--accent-soft); color: var(--accent); font-weight: 600; position: sticky; top: 0; }
+  tbody tr:hover { background: var(--accent-soft); }
+  tbody tr:nth-child(even) { background: color-mix(in srgb, var(--surface) 96%, var(--text) 4%); }
+  blockquote {
+    background: var(--quote-bg); border-left: 4px solid var(--quote-border);
+    margin: 1rem 0; padding: .7rem 1.1rem; border-radius: 0 6px 6px 0;
+  }
+  code { background: var(--code-bg); padding: .15rem .35rem; border-radius: 4px; font-size: .88em; }
+  ul { padding-left: 1.4rem; }
+  li { margin: .25rem 0; }
+  em { color: var(--muted); }
+  a { color: var(--accent); }
+  /* Link cells that read like "Ver X ↗" get pill/button styling */
+  td a, li a {
+    display: inline-block; padding: .15rem .6rem; border-radius: 999px;
+    background: var(--accent-soft); text-decoration: none; font-size: .85em; font-weight: 500;
+  }
+  td a:hover, li a:hover { filter: brightness(0.95); text-decoration: none; }
+  .badge {
+    display: inline-block; padding: .1rem .55rem; border-radius: 999px;
+    font-size: .82em; font-weight: 600;
+  }
+  .badge-good { background: var(--good-bg); color: var(--good); }
+  .badge-warn { background: var(--warn-bg); color: var(--warn); }
+  .badge-bad { background: var(--bad-bg); color: var(--bad); }
+  .badge-neutral { background: var(--neutral-bg); color: var(--muted); }
+</style>
+</head>
+<body>
+{{ body | safe }}
+<script>
+(function () {
+  // Presentation-only enhancement: wrap recognizable plain-text cell values in colored
+  // badges after the fact, so the Markdown source (and the .md file on disk) stays plain
+  // text/tables — this script only touches the rendered DOM, never the underlying data.
+  var fullMatchRules = [
+    { re: /^S[ií]$/i, cls: "badge-good" },
+    { re: /^No$/i, cls: "badge-neutral" },
+    { re: /^(unknown|not_available|not_verified)$/i, cls: "badge-neutral" },
+    { re: /^ALTA$/, cls: "badge-bad" },
+    { re: /^MEDIA$/, cls: "badge-warn" },
+    { re: /^BAJA$/, cls: "badge-good" },
+  ];
+  var prefixRules = [
+    { re: /^\[HECHO\]/, cls: "badge-good" },
+    { re: /^\[INFERENCIA\]/, cls: "badge-warn" },
+    { re: /^\[HIP[ÓO]TESIS\]/, cls: "badge-neutral" },
+  ];
+
+  document.querySelectorAll("td, li").forEach(function (cell) {
+    if (cell.children.length) return; // skip cells that already contain links/spans
+    var text = cell.textContent.trim();
+    if (!text) return;
+
+    for (var i = 0; i < fullMatchRules.length; i++) {
+      if (fullMatchRules[i].re.test(text)) {
+        var span = document.createElement("span");
+        span.className = "badge " + fullMatchRules[i].cls;
+        span.textContent = text;
+        cell.textContent = "";
+        cell.appendChild(span);
+        return;
+      }
+    }
+    for (var j = 0; j < prefixRules.length; j++) {
+      var match = text.match(prefixRules[j].re);
+      if (match) {
+        var prefixSpan = document.createElement("span");
+        prefixSpan.className = "badge " + prefixRules[j].cls;
+        prefixSpan.textContent = match[0];
+        cell.textContent = " " + text.slice(match[0].length);
+        cell.insertBefore(prefixSpan, cell.firstChild);
+        return;
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

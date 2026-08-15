@@ -1,0 +1,98 @@
+# Known large brands / general marketplaces excluded from store rankings and Deep Dive —
+# per explicit operator instruction: "marcas como shein hay que descartarlas, solo tiendas
+# online pequeñas; tomalo como referencia de creativos pero no como referencia de tienda."
+#
+# Matching is case-insensitive substring match against the advertiser's page_name (see
+# src/eci/classifiers/brand_exclusion.py). An excluded advertiser:
+#   - is NEVER included in rankings, Deep Dive, the CSV/JSON "advertisers" export, or the
+#     stores_over_threshold count;
+#   - its ads MAY still feed the aggregate creative-pattern sections (Top Hooks/Angles/
+#     Offers/Products, format strategy, saturation) as market-wide reference, clearly
+#     labeled as "incluye grandes marcas, no ejemplos de tienda pequeña" in the report.
+#
+# This list is illustrative, not exhaustive — extend it per niche/market as you discover
+# more mega-brands/marketplaces showing up in results that shouldn't be treated as "small
+# independent stores".
+
+marketplaces:
+  - "mercado libre"
+  - "mercadolibre"
+  - "amazon"
+  - "aliexpress"
+  - "temu"
+  - "ebay"
+  - "linio"
+  - "dafiti"
+  - "falabella"
+  - "éxito"
+  - "exito"
+  - "alkosto"
+  - "shopify" # the platform itself sometimes runs its own ads; not a merchant store
+  - "walmart"
+  - "shein" # SHEIN operates at marketplace scale even though it looks like a single brand
+
+shared_platforms:
+  # Domains found live carrying multiple, unrelated advertiser names on the EXACT same
+  # product URL (pideelo.co/products/chaqueta-rompeviento-unisex showed up under "Chaquetas
+  # piloto...", "Wolf Collection Premium", "Sequoia Speed Colombia", AND "SHEIN HOME") —
+  # a shared/white-label dropshipping storefront, not any one brand's own store. Matched
+  # against the store_url domain (see classifiers/brand_exclusion.py::is_excluded_domain),
+  # not the page_name.
+  - "pideelo.co"
+  # Same signal, different evidence: found live hosting "Zona Gamer" (gaming chairs) AND
+  # "HomeCommerce" (health/ergonomic pillows) under different product paths — unrelated
+  # product categories on the same domain means it's a shared storefront platform, not one
+  # brand's own site.
+  - "homecommerce.co"
+  # Found live (TEXTIL, 2026-08-14): SIX different Facebook page_names ("Kilayu",
+  # "Floralshe", "CurveShe", "Elmejorr shop", "Ohcomfy", "Coraçao - Puebla") all pointing at
+  # the exact same product URL kilayu.com/products/tsb — a shared dropshipping storefront
+  # platform being run under many different advertiser identities, not one real brand.
+  - "kilayu.com"
+
+marketplace_domains:
+  # Ads whose landing page is a major retailer/marketplace's OWN domain, not the
+  # advertiser's own store — found live: "seltz" (SUPLEMENTOS) pages a Facebook ad but the
+  # landing URL is costco.com.mx's own product page. The advertiser's page_name alone
+  # (checked by `marketplaces` above) doesn't catch this since "seltz" itself isn't a
+  # marketplace name — the store_url domain is what gives it away. Matched the same way as
+  # shared_platforms (see classifiers/brand_exclusion.py::is_excluded_domain).
+  - "costco.com.mx"
+  - "costco.com"
+  - "walmart.com.mx"
+  - "walmart.com"
+  - "amazon.com.mx"
+  - "amazon.com"
+  - "mercadolibre.com.co"
+  - "mercadolibre.com.mx"
+
+mega_brands:
+  - "shein curve"
+  - "zara"
+  - "h&m"
+  - "nike"
+  - "adidas"
+  - "puma"
+  - "under armour"
+  - "samsung"
+  - "xiaomi"
+  - "apple"
+  - "sephora"
+  - "l'oréal"
+  - "loreal"
+  - "nivea"
+  - "dockers" # global Levi Strauss & Co. brand, found in a live TEXTIL/MX run
+  - "levi's"
+  - "levis"
+  - "gap "
+  - "old navy"
+  - "forever 21"
+  - "pull&bear"
+  - "pull & bear"
+  - "bershka"
+  - "stradivarius"
+  - "mango"
+  - "calvin klein"
+  - "tommy hilfiger"
+  - "victoria's secret"
+  - "victorias secret"

@@ -1,0 +1,45 @@
+# Manually-curated "estructura del creativo" notes — REQUIRES a human/analyst to actually
+# look at the ad (video/image). See config/creative_notes/TEXTIL.yaml for the full format
+# explanation. Reviewed 2026-08-14 (SUPLEMENTOS — top brands by active ad count, post
+# multi-vendor-affiliate filter).
+
+annienaturals.co:
+  video: >-
+    Close-up de manos/uñas en formato UGC (grabado con celular, sin trípode profesional),
+    con texto superpuesto tipo subtítulo ("no dejes que tu salud y belleza esperen"). Estilo
+    testimonial de resultados: se enfoca en la parte del cuerpo que promete mejorar (uñas,
+    articulaciones) en vez de mostrar a una persona hablando a cámara. El copy del post
+    (colágeno marino + ganoderma, dolores articulares, cabello, uñas) hace todo el trabajo
+    de explicar el producto; el video es solo evidencia visual de "resultado".
+
+zxfit.com.co:
+  video: >-
+    Formato "médico/experto" a cámara: hombre presentado como "Médico Juan Darío Uribe"
+    sentado en un sillón, ambiente hogareño (ventanal con vista, luz natural), sosteniendo
+    el producto mientras habla, con texto superpuesto tipo subtítulo destacando el beneficio
+    ("TENEMOS ESTE ANTICELULÍTICO"). El uso de una figura con bata/persona médica como
+    presentador de la marca es el eje central de la estrategia — vende autoridad/confianza
+    antes que el producto en sí.
+
+nuvinutrition.mx:
+  # Confirmado visualmente que es una imagen estática, pero el scraper no detectó formato
+  # de video (sin duration scrubber) y guardó el anuncio como "unknown" — la clave debe
+  # coincidir con ad.format tal como quedó almacenado para que la nota se muestre.
+  unknown: >-
+    Fotografía de producto limpia (frasco de vitaminas gomitas + gomitas sueltas junto al
+    envase, fondo neutro) con texto superpuesto en la parte inferior tipo anuncio de
+    revista ("El frasco de vitaminas para tus hijos que por primera vez vas a tener...").
+    El copy del post abre con un gancho dirigido a mamás ("¡Alerta mamá!") y lista beneficios
+    en formato checklist (sin azúcar añadida, ingredientes naturales, certificado COFEPRIS).
+    Sin modelo humano — el producto y el copy cargan todo el mensaje.
+
+tikitikibabyshop.com:
+  # Mismo caso: imagen estática confirmada visualmente, almacenada como "unknown" porque
+  # el scraper solo distingue "video" (via duration scrubber) de "no video".
+  unknown: >-
+    Formato "advertorial"/testimonio falso de post orgánico: titular grande en rojo/amarillo
+    tipo clickbait ("EL SECRETO PARA ADELGAZAR RÁPIDO") superpuesto sobre foto del frasco de
+    gomitas, con checklist de beneficios (ayuda a adelgazar, ideal en ayunas, envío gratis) y
+    copy en primera persona simulando una recomendación de amiga ("Ya nada me quedaba, subí
+    muchos kilos..."). Es el patrón de mayor riesgo de claims del lote: promete resultados
+    de pérdida de peso de forma directa — señalado por el sistema de claims-risk del reporte.

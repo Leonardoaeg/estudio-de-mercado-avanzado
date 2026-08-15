@@ -1,0 +1,249 @@
+{# Niche report — 21-section structure per spec section 35 #}
+# META ADS CREATIVE INTELLIGENCE — {{ niche | upper }} ({{ market }})
+
+_Generado: {{ generated_at }} · Run: `{{ run_uuid }}` · Fuente: `{{ source_name }}`_
+
+> {{ source_notes }}
+
+## 1. Resumen ejecutivo
+
+- **{{ presence_ranking | length }} marcas verificables** superan el umbral de {{ minimum_active_ads }} anuncios activos y ecommerce_score ≥ 70 dentro de la muestra analizada.
+- {{ pages_discovered }} páginas descubiertas → {{ pages_analyzed }} analizadas → {{ ecommerce_verified }} verificadas como ecommerce → {{ stores_over_threshold }} superan el umbral configurado.
+- {{ total_ads_analyzed }} anuncios activos analizados en total entre las marcas que superan el umbral.
+- Estas cifras son **señales de presencia publicitaria observable**, no de ventas, ROAS ni rentabilidad (ver Metodología, sección 21).
+{% if reference_brand_names %}
+- **Marcas grandes / marketplaces excluidas de la muestra de tiendas** ({{ reference_brand_names | join(', ') }}): sus anuncios se usan únicamente como referencia de patrones creativos (hooks, ángulos, ofertas — secciones 6-12), nunca como ejemplo de tienda pequeña ni aparecen en los rankings, el Deep Dive o el CSV.
+{% endif %}
+
+## 2. Universo analizado
+
+| Etapa | n |
+|---|---:|
+| Páginas descubiertas | {{ pages_discovered }} |
+| Páginas analizadas | {{ pages_analyzed }} |
+| Ecommerce verificadas | {{ ecommerce_verified }} |
+| Con ≥{{ minimum_active_ads }} anuncios activos y ecommerce_score≥70 | {{ stores_over_threshold }} |
+| Anuncios activos analizados (marcas calificadas) | {{ total_ads_analyzed }} |
+
+## 3. Top 10 — Highest Advertising Presence
+
+| Rank | Marca | Score | Shopify | Tienda | Ver anuncios |
+|---:|---|---:|:---:|---|---|
+{% for row in presence_ranking %}
+| {{ row.rank }} | {{ row.page_name }} | {{ row.score }} | {% if row.shopify_detected == true %}Sí{% elif row.shopify_detected == false %}No{% else %}unknown{% endif %} | {% if row.store_url %}[Ver tienda ↗]({{ row.store_url }}){% else %}not_available{% endif %} | {% if row.ads_library_page_url %}[{{ "Ver anuncios ↗" if row.ads_library_is_page_level else "Ver anuncios de la marca ↗" }}]({{ row.ads_library_page_url }}){% else %}not_available{% endif %} |
+{% endfor %}
+{% if not presence_ranking %}
+_Sin marcas que superen el umbral configurado en esta muestra._
+{% endif %}
+
+## 4. Top 10 — Fastest Advertising Acceleration
+
+| Rank | Marca | Acceleration Score | Tienda | Ver anuncios |
+|---:|---|---:|---|---|
+{% for row in acceleration_ranking %}
+| {{ row.rank }} | {{ row.page_name }} | {{ row.score }} | {% if row.store_url %}[Ver tienda ↗]({{ row.store_url }}){% else %}not_available{% endif %} | {% if row.ads_library_page_url %}[{{ "Ver anuncios ↗" if row.ads_library_is_page_level else "Ver anuncios de la marca ↗" }}]({{ row.ads_library_page_url }}){% else %}not_available{% endif %} |
+{% endfor %}
+{% if not acceleration_ranking %}
+_Sin snapshot previo comparable todavía — este ranking requiere al menos dos ejecuciones (`eci research` en fechas distintas)._
+{% endif %}
+
+## 5. Creative Mix (formato)
+
+| Formato | Anuncios |
+|---|---:|
+| Video | {{ format_counts.video }} |
+| Imagen | {{ format_counts.image }} |
+| Carrusel | {{ format_counts.carousel }} |
+| Desconocido | {{ format_counts.unknown }} |
+
+## 6. Estrategia de Video
+
+- Anuncios en video analizados: {{ video_strategy.count }}
+- Hooks predominantes: {{ video_strategy.top_hooks | fmt_pairs }}
+- Ángulos predominantes: {{ video_strategy.top_angles | fmt_pairs }}
+- Ofertas predominantes: {{ video_strategy.top_offers | fmt_pairs }}
+
+## 7. Estrategia de Imagen
+
+- Anuncios en imagen analizados: {{ image_strategy.count }}
+- Hooks predominantes: {{ image_strategy.top_hooks | fmt_pairs }}
+- Ángulos predominantes: {{ image_strategy.top_angles | fmt_pairs }}
+- Ofertas predominantes: {{ image_strategy.top_offers | fmt_pairs }}
+
+## 8. Estrategia de Carrusel
+
+- Anuncios en carrusel analizados: {{ carousel_strategy.count }}
+- Hooks predominantes: {{ carousel_strategy.top_hooks | fmt_pairs }}
+- Ángulos predominantes: {{ carousel_strategy.top_angles | fmt_pairs }}
+- Ofertas predominantes: {{ carousel_strategy.top_offers | fmt_pairs }}
+
+## 9. Top Hooks
+
+| Hook | Anuncios |
+|---|---:|
+{% for label, count in top_hooks %}
+| {{ label }} | {{ count }} |
+{% endfor %}
+
+## 10. Top Ángulos
+
+| Ángulo | Anuncios |
+|---|---:|
+{% for label, count in top_angles %}
+| {{ label }} | {{ count }} |
+{% endfor %}
+
+## 11. Top Ofertas
+
+| Oferta | Anuncios |
+|---|---:|
+{% for label, count in top_offers %}
+| {{ label }} | {{ count }} |
+{% endfor %}
+
+## 12. Top Productos
+
+| Producto | Anuncios |
+|---|---:|
+{% for label, count in top_products %}
+| {{ label }} | {{ count }} |
+{% endfor %}
+
+## 13. Anuncios activos más antiguos (Longest Running Ads)
+
+| Anuncio | Marca | Días activo | Formato | Ver anuncio |
+|---|---|---:|---|---|
+{% for ad in longest_running %}
+| {{ ad.ad_id }} | {{ ad.page_name }} | {{ ad.age_days }} | {{ ad.format.value }} | {% if ad.ad_library_url %}[Ver anuncio ↗]({{ ad.ad_library_url }}){% else %}not_available{% endif %} |
+{% endfor %}
+
+## 14. Familias creativas
+
+Ver `creative_families` en la base de datos para la agrupación completa por marca
+(agrupación por similitud de texto — copy, hook, producto, landing, CTA — sección 17).
+El campo `member_count` indica cuántos anuncios comparten un mismo concepto creativo.
+
+## 15. Tendencias publicitarias (Advertising Trends)
+
+Este reporte es de una sola ejecución. Las tendencias comparativas entre periodos requieren
+al menos dos snapshots y se generan con `eci trends --niche {{ niche }} --market {{ market }}`.
+Recuerda: son **tendencias de actividad publicitaria observada**, nunca tendencias de ventas.
+
+## 16. Señales de saturación
+
+### Por producto
+
+| Producto | Marcas distintas | Anuncios | Nivel |
+|---|---:|---:|---|
+{% for s in saturation_products %}
+| {{ s.label }} | {{ s.distinct_brands }} | {{ s.total_ads }} | {{ s.level }} |
+{% endfor %}
+
+### Por combinación creativa (hook + ángulo)
+
+| Combinación | Marcas distintas | Anuncios | Nivel |
+|---|---:|---:|---|
+{% for s in saturation_creative %}
+| {{ s.label }} | {{ s.distinct_brands }} | {{ s.total_ads }} | {{ s.level }} |
+{% endfor %}
+
+## 17. Oportunidades (HIPÓTESIS)
+
+Productos con baja saturación observada (≥2 marcas ya lo anuncian, pero el nivel es BAJA):
+
+| Producto | Marcas distintas | Anuncios |
+|---|---:|---:|
+{% for s in opportunities %}
+| {{ s.label }} | {{ s.distinct_brands }} | {{ s.total_ads }} |
+{% endfor %}
+{% if not opportunities %}
+_Sin candidatos claros en esta muestra._
+{% endif %}
+
+> Esto es una **HIPÓTESIS**, no una recomendación de inversión: baja saturación observable
+> en Meta Ads no implica demanda real ni rentabilidad.
+
+## 18. Deep Dive — Top 10
+
+{% for d in deep_dives %}
+### #{{ d.rank }} — {{ d.page_name }}
+
+**Identidad**: Nicho {{ d.niche }} / Subnicho {{ d.subniche }} · Shopify: {% if d.shopify_detected == true %}Sí{% elif d.shopify_detected == false %}No{% else %}unknown{% endif %}
+
+
+**Enlaces**: {% if d.fanpage_url %}[Fan Page ↗]({{ d.fanpage_url }}){% else %}Fan Page: not_available{% endif %} · {% if d.store_url %}[Tienda ↗]({{ d.store_url }}){% else %}Tienda: not_available{% endif %} · {% if d.ads_library_page_url %}[{{ "Ver todos los anuncios activos ↗" if d.ads_library_is_page_level else "Ver anuncios de la marca ↗" }}]({{ d.ads_library_page_url }}){% else %}Anuncios: not_available{% endif %}
+
+
+**Publicidad**: {{ d.active_ad_count }} anuncios activos · Video {{ d.video_count }} · Imagen {{ d.image_count }} · Carrusel {{ d.carousel_count }}
+
+**Persistencia**: Anuncio más antiguo: {{ d.oldest_active_ad_age_days }} días{% if d.oldest_active_ad_url and d.oldest_active_ad_url != "not_available" %} ([ver ↗]({{ d.oldest_active_ad_url }})){% endif %} · Mediana: {{ d.median_ad_age }} días · ≥14d: {{ d.ads_over_14_days }} · ≥30d: {{ d.ads_over_30_days }} · ≥60d: {{ d.ads_over_60_days }}
+
+**Estrategia**: Hooks: {{ d.top_hooks | fmt_pairs }} · Ángulos: {{ d.top_angles | fmt_pairs }} · Ofertas: {{ d.top_offers | fmt_pairs }} · Productos: {{ d.top_products | fmt_pairs }}
+
+**Scores**: Scale Signal {{ d.scale_signal_score }}/100 · Confidence {{ d.confidence_score }}/100 · Crecimiento vs. snapshot anterior: {{ d.growth_percentage if d.growth_percentage is not none else "not_available (sin snapshot previo)" }}
+
+**Resumen**: {{ d.summary }}
+
+{% endfor %}
+
+## 19. Fuentes
+
+- Fuente de anuncios: `{{ source_name }}` — {{ source_notes }}
+- Validación ecommerce y detección Shopify: fetch HTTP directo a la tienda declarada en el anuncio (GET únicamente, sin login ni checkout).
+- Base de datos: SQLite local (`data/eci.db`), ver `research_runs` (run `{{ run_uuid }}`) para el registro de observabilidad completo.
+
+## 20. Metodología
+
+- Ventana de referencia de longevidad: 30–90 días (configurable en `config/scoring.yaml`), usada como la señal de persistencia más fiable, distinta de anuncios recién lanzados (<30d) o de cola larga (>90d).
+- Scale Signal Score: volumen (log-normalizado + percentil), persistencia, diversidad creativa, diversidad de formato, presencia histórica, verificación ecommerce (pesos en `config/scoring.yaml`).
+- Confidence Score: completitud de campos, confiabilidad de la fuente, frescura de los datos, concordancia entre señales — **separado** del Scale Signal Score.
+- Clasificadores de hook/ángulo/oferta/formato: heurísticas de texto sobre el copy del anuncio (`primary_text`/`headline`/`description`), no análisis visual de video/imagen (ver Limitaciones).
+- Regla de objetividad: nunca se afirma venta, ROAS o rentabilidad a partir de señales publicitarias.
+- Marcas grandes / marketplaces generales (lista en `config/excluded_brands.yaml`, p. ej. SHEIN, Mercado Libre, Amazon) se excluyen de rankings, Deep Dive y del CSV/JSON de tiendas — nunca se presentan como ejemplo de tienda pequeña. Sus anuncios sí pueden aparecer en las secciones agregadas de patrones creativos (hooks/ángulos/ofertas), donde se los usa solo como referencia de mercado.
+
+## 21. Limitaciones
+
+{% if errors %}
+**Errores registrados en esta ejecución:**
+{% for e in errors %}
+- {{ e }}
+{% endfor %}
+{% endif %}
+{% if warnings %}
+**Advertencias:**
+{% for w in warnings %}
+- {{ w }}
+{% endfor %}
+{% endif %}
+
+- No se realizó análisis visual de frames de video ni hashing perceptual de imágenes en esta versión — los hooks/ángulos/estilos se infieren del texto del anuncio.
+- El formato exacto (video/imagen/carrusel) puede quedar `unknown` cuando la fuente no lo expone directamente (p. ej. Meta Graph API sin descarga de la creatividad).
+- La detección de Shopify y la validación de ecommerce dependen de que la tienda responda al fetch HTTP; sitios que bloquean bots quedarán como `not_verified`.
+- El scraper web de Meta Ad Library es best-effort y puede fallar si Meta cambia el HTML — errores se registran y no interrumpen la corrida.
+- Con la fuente `meta_web_scraper`, la tarjeta del anuncio no expone el ID numérico real de la Página (requeriría un clic adicional por anuncio, no implementado en v1) — por eso "Fan Page" y "Ver anuncios" muestran `not_available` o enlazan a un anuncio puntual en vez de al listado completo de la Página. El link a la tienda y el anuncio específico sí son reales y funcionan.
+
+{% if is_claims_sensitive_niche %}
+## Anexo — Claims / Policy Risk ({{ niche }})
+
+Anuncios con lenguaje de riesgo detectado (cura/trata/elimina/resultados garantizados, etc.):
+
+| Anuncio | Marca | Flags |
+|---|---|---|
+{% for c in claims_flagged %}
+| {{ c.ad_id }} | {{ c.page_name }} | {{ c.flags | join(', ') }} |
+{% endfor %}
+{% if not claims_flagged %}
+_Sin lenguaje de riesgo detectado en la muestra analizada (heurística de texto, no garantiza cumplimiento total de políticas)._
+{% endif %}
+
+> No se recomienda copiar un claim de riesgo solo porque otros anunciantes lo usen.
+{% endif %}
+
+## Insights (InsightEngine)
+
+{% for insight in insights %}
+- [{{ insight.evidence_level }}] {{ insight.statement }}
+{% endfor %}
+{% if not insights %}
+_Muestra insuficiente para generar insights automáticos._
+{% endif %}

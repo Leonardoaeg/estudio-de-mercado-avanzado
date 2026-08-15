@@ -1,0 +1,68 @@
+# Manually-curated "estructura del creativo" notes — REQUIRES a human/analyst to actually
+# look at the ad (video/image), which is not something the text-scraping pipeline can do on
+# its own (see IMPLEMENTATION_PLAN.md limitations: no visual/video analysis in v1). Filled
+# in via direct visual review (Browser tool + screenshot) of each brand's real reference ad.
+#
+# Keyed by store domain (matches the same dedup key used in reports/library.py) so entries
+# survive re-scraping. Each entry maps a format ("video"/"image"/"carousel") to a short,
+# concrete description of the creative's structure — written to be copy-able guidance for
+# making a new ad in that style, not a generic label.
+#
+# Reviewed 2026-08-14 (first batch — top brands by active ad count). Remaining brands in
+# the library are not yet visually reviewed; their cards simply show no "Estructura" note.
+
+icon-amsterdam.com:
+  video: >-
+    Producto en primer plano, sin rostro visible: encuadre cerrado en torso/piernas
+    mostrando la prenda puesta (overshirt, pantalón), en interior minimalista con luz
+    natural, movimientos lentos y deliberados (ajustar la prenda, caminar despacio).
+    Texto/copy del beneficio va como texto del post, no como texto sobre el video. Estilo
+    editorial de moda silencioso, sin diálogo a cámara.
+
+one4viceco.com:
+  video: >-
+    Formato "unboxing/reveal": toma cenital (desde arriba) de varias unidades del
+    producto en distintos colores extendidas sobre una superficie (cama/mesa), con texto
+    superpuesto tipo reseña ("Y la verdad queda…"). Sin rostro. Ritmo de edición típico de
+    contenido UGC de unboxing, no de modelo hablando a cámara.
+  # Imagen estática confirmada visualmente; el scraper la guardó como "unknown" (solo
+  # distingue "video" vía duration scrubber) — la clave debe coincidir con ad.format tal
+  # como quedó almacenado para que la nota se muestre.
+  unknown: >-
+    Foto tipo catálogo/infografía: producto plano (flat lay) con iconos de beneficios
+    superpuestos (transpirable, copa espaciosa, suave con la piel) y banda inferior con
+    "envío gratis / pago contra entrega". También usan grid de variantes de color en una
+    sola imagen (pack x12) con firma/marca de agua.
+
+byinnovastore.com:
+  video: >-
+    Modelo de cuerpo casi completo (rostro parcialmente visible) probándose la prenda
+    (faja moldeadora) en una habitación simple, sujetando o ajustando algo frente al
+    cuerpo — formato "prueba de producto / resultado" filmado estilo selfie o espejo, sin
+    edición vistosa, cercano a UGC real de clienta.
+
+pideelo.co:
+  image: >-
+    Foto de catálogo clásica: hombre modelo mirando directo a cámara con gesto positivo
+    (pulgar arriba), fondo neutro de estudio, sin texto superpuesto en la imagen — el copy
+    va aparte en el texto del anuncio. CTA principal es WhatsApp ("Chatea con nosotros"),
+    no checkout directo, aunque sí tienen tienda online.
+
+curvy-faja.com.mx:
+  video: >-
+    Mismo patrón que byinnovastore.com: mujer de espaldas/perfil mostrando el ajuste de la
+    faja en un dormitorio con luz cálida, cabello en trenzas, estilo selfie/UGC casero, sin
+    edición ni texto en pantalla — el resultado visual de la prenda es el "argumento".
+
+dulcehogar55.myshopify.com:
+  video: >-
+    Mismo patrón de "resultado de espaldas" que las otras fajas (Orbitta, Curvy-faja):
+    mujer en interior doméstico mostrando el efecto moldeador desde atrás, sin texto en
+    pantalla, ritmo lento, un solo plano fijo.
+
+kilayu.com:
+  video: >-
+    Variante con rostro visible: mujer sonriendo a cámara, ambientación tipo tienda física
+    (percheros/fixtures desenfocados de fondo), con texto superpuesto de oferta ("-50%") y
+    beneficios del producto. Más cercano a "vendedora mostrando producto en tienda" que a
+    UGC casero — combina prueba social de cara visible con oferta agresiva en pantalla.

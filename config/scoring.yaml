@@ -1,0 +1,46 @@
+# Scale Signal Score weights (must sum to 1.0) — section 22 of the spec.
+scale_signal_weights:
+  active_ads_volume: 0.35        # log-normalized / percentile, never raw count
+  persistence: 0.25               # driven by longevity buckets incl. the 30-90d reference window
+  creative_diversity: 0.15        # number of distinct creative families vs total ads
+  format_diversity: 0.10          # spread across video/image/carousel
+  historical_presence: 0.10       # snapshot history depth (weeks observed)
+  ecommerce_verification: 0.05    # ecommerce_score contribution
+
+# Confidence Score weights (data completeness / verification quality), separate from Scale Signal.
+confidence_weights:
+  field_completeness: 0.40        # % of expected fields populated (not "unknown"/"not_available")
+  source_reliability: 0.25        # graph_api > web_scraper > mock, and per-request success rate
+  sample_freshness: 0.20          # last_verified_at recency
+  cross_signal_agreement: 0.15    # e.g. shopify signals agreeing, ecommerce signals agreeing
+
+# Longevity reference window (mirrors settings.yaml; kept here too so scoring is self-contained
+# and testable without loading settings.yaml). Ads in [min_age_days, max_age_days] are weighted
+# as the strongest persistence signal; requested explicitly by the operator.
+longevity_reference_window:
+  min_age_days: 30
+  max_age_days: 90
+  reference_window_weight: 0.6    # share of the "persistence" component driven by this window
+  long_tail_weight: 0.25          # ads > max_age_days (evergreen/outlier, still counts, less weight)
+  recent_weight: 0.15             # ads < min_age_days (freshly launched/testing, least weight)
+
+volume_normalization:
+  method: log10                   # log10(1 + active_ad_count), then min-max scaled within the run's cohort
+
+shopify_detection:
+  minimum_signals_required: 2     # never affirm Shopify on a single weak signal
+  signal_weights:
+    cdn_shopify_com: 0.35
+    cdn_shop_path: 0.25
+    shopify_section_class: 0.15
+    shopify_theme_js_global: 0.15
+    shopify_analytics_object: 0.10
+
+ecommerce_validation:
+  minimum_score_recommended: 70
+  signal_weights:
+    has_price_pattern: 0.25
+    has_add_to_cart: 0.25
+    has_checkout_or_cart_path: 0.20
+    has_product_schema_or_grid: 0.15
+    has_payment_or_shipping_terms: 0.15

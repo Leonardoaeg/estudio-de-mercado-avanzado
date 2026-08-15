@@ -1,0 +1,40 @@
+# MASTER ECOMMERCE CREATIVE INTELLIGENCE REPORT — {{ market }}
+
+_Generado: {{ generated_at }}_
+
+Comparativo entre nichos, construido a partir de los reportes individuales ya generados
+(`eci report --niche <nicho> --market {{ market }}`). Si un nicho no aparece, todavía no
+tiene datos suficientes en la base — ejecuta `eci research --niche <nicho>` primero.
+
+| Nicho | Reporte completo | Marcas calificadas | Anuncios activos | Shopify detectado | Video % | Imagen % | Carrusel % | Anuncio más antiguo (días) | Scale Signal promedio |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+{% for n in niches %}
+| {{ n.niche }} | [Ver reporte ↗]({{ n.report_relative_path }}) | {{ n.advertisers_count }} | {{ n.total_ads }} | {{ n.shopify_count }} | {{ n.video_pct }} | {{ n.image_pct }} | {{ n.carousel_pct }} | {{ n.oldest_ad_days if n.oldest_ad_days is not none else "not_available" }} | {{ n.avg_scale_signal }} |
+{% endfor %}
+{% if not niches %}
+_Sin nichos con datos todavía._
+{% endif %}
+
+## Top hooks por nicho
+
+{% for n in niches %}
+- **{{ n.niche }}**: {{ n.top_hooks | fmt_pairs }}
+{% endfor %}
+
+## Top ofertas por nicho
+
+{% for n in niches %}
+- **{{ n.niche }}**: {{ n.top_offers | fmt_pairs }}
+{% endfor %}
+
+## Top productos por nicho
+
+{% for n in niches %}
+- **{{ n.niche }}**: {{ n.top_products | fmt_pairs }}
+{% endfor %}
+
+## Metodología y limitaciones
+
+Ver el reporte individual de cada nicho (`reports/<fecha>_{{ market }}_<nicho>/report.md`)
+para metodología completa, fuentes y limitaciones. Este informe maestro solo agrega
+métricas ya calculadas — no vuelve a analizar anuncios ni recalcula scores.

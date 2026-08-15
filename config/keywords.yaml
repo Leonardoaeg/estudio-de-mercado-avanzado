@@ -1,0 +1,46 @@
+# Seed keywords per niche, used by the discovery engine as generation 0. Each keyword
+# spawns ad searches; discovered advertisers/products/subniches feed generation 1+ keywords
+# (see discovery/keyword_engine.py: keywords -> ads -> pages -> products -> new keywords).
+
+TEXTIL:
+  - one4vice
+  - vestido colombiano
+  - enterizo dama
+  - conjunto deportivo mujer
+  - jean levanta cola
+  - chaqueta impermeable
+  - faja moldeadora
+  - ropa activewear mujer
+  - camisa hombre slim fit
+
+SALUD:
+  - faja para dolor de espalda
+  - corrector de postura
+  - plantillas ortopedicas
+  - masajeador circulacion
+  - rodillera ortopedica
+  - almohada cervical
+
+TECNOLOGIA:
+  - audifonos bluetooth
+  - smartwatch
+  - camara de seguridad wifi
+  - luces led inteligentes
+  - power bank rapido
+  - soporte celular carro
+
+BELLEZA:
+  - serum facial
+  - plancha de cabello
+  - kit skincare coreano
+  - depiladora facial
+  - perfume importado
+  - crema reafirmante
+
+SUPLEMENTOS:
+  - colageno hidrolizado
+  - creatina monohidratada
+  - vitaminas multivitaminico
+  - proteina vegana
+  - melatonina gomitas
+  - quemador de grasa natural

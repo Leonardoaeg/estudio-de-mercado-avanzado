@@ -1,0 +1,42 @@
+[project]
+name = "eci"
+version = "0.1.0"
+description = "Ecommerce Creative Intelligence — Meta Ads competitive research agent"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.28",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.5",
+    "SQLAlchemy>=2.0",
+    "typer>=0.12",
+    "jinja2>=3.1",
+    "beautifulsoup4>=4.12",
+    "lxml>=5.3",
+    "pandas>=2.2",
+    "pyyaml>=6.0",
+    "tenacity>=9.0",
+    "playwright>=1.47",
+    "markdown>=3.7",
+    "rich>=13.7",
+    "python-docx>=1.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3", "pytest-mock>=3.14"]
+
+[project.scripts]
+eci = "eci.cli.main:app"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+markers = [
+    "live: integration tests that hit real network sources (skipped by default)",
+]
+addopts = "-m \"not live\""
+testpaths = ["tests"]
