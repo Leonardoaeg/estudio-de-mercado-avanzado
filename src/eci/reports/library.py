@@ -200,6 +200,7 @@ def _build_library_context(
     min_ecommerce_score: float = 70.0,
     top_n: int = 10,
     must_include_domains: list[str] | None = None,
+    niche_href_fn=lambda code: f"{code}.html",
 ) -> dict:
     """All the selection/filtering/aggregation work for one niche's biblioteca, shared by
     every output format (HTML, JSON, DOCX) — a single source of truth so they can never
@@ -395,7 +396,7 @@ def _build_library_context(
     # Sourced from config/niches.yaml — the same taxonomy the whole pipeline uses — rather
     # than hand-maintained here, so a niche never goes stale/missing from the nav.
     all_niches = [
-        {"code": code, "label": info.get("label", code.title()), "active": code == niche}
+        {"code": code, "label": info.get("label", code.title()), "active": code == niche, "href": niche_href_fn(code)}
         for code, info in get_settings().niches.items()
     ]
 

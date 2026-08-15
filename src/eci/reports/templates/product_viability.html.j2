@@ -28,6 +28,12 @@
   .brand-name { font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; }
   .brand-sub { color: var(--muted); font-size: .78rem; }
 
+  .niche-nav { display: flex; gap: .3rem; padding: .7rem 1.6rem; overflow-x: auto; background: var(--bg-soft); border-bottom: 1px solid var(--border); align-items: center; }
+  .niche-tab { text-decoration: none; white-space: nowrap; font-size: .85rem; font-weight: 600; color: var(--muted); padding: .45rem .9rem; border-radius: 999px; border: 1px solid transparent; }
+  .niche-tab:hover { color: var(--text); background: var(--tag-bg); }
+  .niche-tab.active { color: var(--bg); background: var(--accent); }
+  .nav-cta { margin-left: auto; text-decoration: none; white-space: nowrap; font-size: .85rem; font-weight: 700; color: var(--bg); background: var(--gold); padding: .45rem .9rem; border-radius: 999px; }
+
   .page-head { max-width: 1000px; margin: 0 auto; padding: 2rem 1.6rem 0; }
   .breadcrumb { color: var(--muted-2); font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; margin: 0 0 .5rem; }
   .page-head h1 { font-size: 1.6rem; margin: 0 0 .3rem; letter-spacing: -.01em; }
@@ -76,6 +82,15 @@
     <div class="brand-sub">Ecommerce Creative Intelligence · Análisis de Viabilidad de Producto</div>
   </div>
 </header>
+
+{% if all_niches %}
+<nav class="niche-nav">
+  {% for n in all_niches %}
+  <a class="niche-tab{{ ' active' if n.active else '' }}" href="{{ n.href }}">{{ n.label }}</a>
+  {% endfor %}
+  {% if new_analysis_href %}<a class="nav-cta" href="{{ new_analysis_href }}">＋ Analizar otro producto</a>{% endif %}
+</nav>
+{% endif %}
 
 <div class="page-head">
   <p class="breadcrumb">ECI Suite / {{ result.niche | title }} / Análisis de producto</p>

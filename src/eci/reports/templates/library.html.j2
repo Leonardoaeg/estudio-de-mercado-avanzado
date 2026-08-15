@@ -224,7 +224,7 @@
 
 <nav class="niche-nav">
   {% for n in all_niches %}
-  <a class="niche-tab{{ ' active' if n.active else '' }}" href="{{ n.code }}.html">{{ n.label }}</a>
+  <a class="niche-tab{{ ' active' if n.active else '' }}" href="{{ n.href }}">{{ n.label }}</a>
   {% endfor %}
 </nav>
 

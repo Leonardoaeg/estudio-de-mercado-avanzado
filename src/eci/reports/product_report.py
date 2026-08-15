@@ -11,11 +11,18 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from eci.analysis.product_viability import analyze_product
-from eci.config import REPORTS_DIR
+from eci.analysis.product_viability import ProductViabilityResult, analyze_product
+from eci.config import REPORTS_DIR, get_settings
 
 TEMPLATES_DIR = Path(__file__).parent / "templates"
 PRODUCT_REPORTS_DIR = REPORTS_DIR / "analisis_producto"
+
+_env = Environment(
+    loader=FileSystemLoader(str(TEMPLATES_DIR)),
+    autoescape=select_autoescape(enabled_extensions=("html",)),
+    trim_blocks=True,
+    lstrip_blocks=True,
+)
 
 
 def _slugify(text: str) -> str:
@@ -24,6 +31,31 @@ def _slugify(text: str) -> str:
     while "--" in slug:
         slug = slug.replace("--", "-")
     return slug.strip("-")[:60] or "producto"
+
+
+def render_product_html(
+    result: ProductViabilityResult,
+    generated_at: str,
+    *,
+    niche_href_fn=lambda code: f"{code}.html",
+    include_nav: bool = False,
+    new_analysis_href: str | None = None,
+) -> str:
+    """The actual HTML render, factored out so both the static build (writes a file) and
+    the live webapp (renders straight into an HTTP response, no file I/O) use the exact
+    same template and never drift apart. `include_nav=False` by default: a standalone
+    static export doesn't need cross-niche nav links wired to app routes that won't exist
+    on disk — only the live webapp passes include_nav=True."""
+    all_niches = None
+    if include_nav:
+        all_niches = [
+            {"code": code, "label": info.get("label", code.title()), "active": code == result.niche, "href": niche_href_fn(code)}
+            for code, info in get_settings().niches.items()
+        ]
+    template = _env.get_template("product_viability.html.j2")
+    return template.render(
+        result=result, generated_at=generated_at, all_niches=all_niches, new_analysis_href=new_analysis_href
+    )
 
 
 def build_product_report(
@@ -46,15 +78,7 @@ def build_product_report(
         currency_note=currency_note,
     )
     generated_at = datetime.now(timezone.utc).isoformat()
-
-    env = Environment(
-        loader=FileSystemLoader(str(TEMPLATES_DIR)),
-        autoescape=select_autoescape(enabled_extensions=("html",)),
-        trim_blocks=True,
-        lstrip_blocks=True,
-    )
-    template = env.get_template("product_viability.html.j2")
-    html = template.render(result=result, generated_at=generated_at)
+    html = render_product_html(result, generated_at)
 
     PRODUCT_REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     slug = _slugify(product_description)
