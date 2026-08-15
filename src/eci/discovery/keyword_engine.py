@@ -58,6 +58,21 @@ def expand_keywords(
     return [term for term, _ in candidates[:max_new_keywords]]
 
 
+def _seed_matches(seed: str, text_lower: str) -> bool:
+    term = seed.replace("_", " ")
+    if term in text_lower:
+        return True
+    # A real gap found via product_viability.py (2026-08-14): niches.yaml stores seeds
+    # plural ("chaquetas"), but a user describing a product to sell writes singular
+    # ("chaqueta rompevientos unisex") — a plain substring check never matches either
+    # direction, so tolerate the simple Spanish singular/plural mismatch.
+    if term.endswith("s") and term[:-1] in text_lower:
+        return True
+    if not term.endswith("s") and f"{term}s" in text_lower:
+        return True
+    return False
+
+
 def classify_subniche(text: str, subniche_seeds: dict[str, list[str]]) -> tuple[str | None, float]:
     """Assigns the best-matching subniche by seed-keyword overlap. Returns
     (subniche_or_None, classification_confidence in [0,1]). Confidence is a simple
@@ -67,7 +82,7 @@ def classify_subniche(text: str, subniche_seeds: dict[str, list[str]]) -> tuple[
     text_lower = text.lower()
     best_subniche, best_score = None, 0
     for subniche, seeds in subniche_seeds.items():
-        score = sum(1 for seed in seeds if seed.replace("_", " ") in text_lower)
+        score = sum(1 for seed in seeds if _seed_matches(seed, text_lower))
         if score > best_score:
             best_subniche, best_score = subniche, score
     if best_subniche is None:

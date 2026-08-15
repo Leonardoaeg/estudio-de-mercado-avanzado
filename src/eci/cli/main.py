@@ -16,6 +16,7 @@ from eci.pipeline.orchestrator import RunConfig, run_research
 from eci.reports.docx_export import build_docx
 from eci.reports.generator import ReportBundle, build_master_report, write_reports
 from eci.reports.library import build_library
+from eci.reports.product_report import build_product_report
 from eci.sources import available_sources
 from eci.trends.trend_engine import SnapshotWindow, build_trend_report
 
@@ -306,6 +307,38 @@ def library(
                 top_n=top_n, must_include_domains=must_include_domains,
             )
             console.print(f"[green]Word generado:[/green] {docx_path}")
+    finally:
+        session.close()
+
+
+@app.command("analyze-product")
+def analyze_product_cmd(
+    niche: str = typer.Option(...),
+    product: str = typer.Option(..., "--product", help="Free-text description of the product you want to sell"),
+    market: str = typer.Option(None, help="Comma-separated markets, e.g. CO,MX"),
+    cost_price: float = typer.Option(None, "--cost-price", help="What the product costs you"),
+    target_price: float = typer.Option(None, "--target-price", help="Price you plan to sell it at"),
+    currency: str = typer.Option(None, "--currency", help="Currency label, e.g. COP, MXN, USD — just noted in the report"),
+):
+    """`eci analyze-product --niche textil --market CO --product "chaqueta impermeable unisex" --cost-price 35000 --target-price 89000`
+    Analyzes a product idea against REAL competitors already found in the database for
+    that niche/market (run `eci research` first if empty): counts competitors and their
+    scale, estimates a market price range from competitors' own ad copy, checks your
+    margin, and gives a transparent viability verdict (never a black-box score).
+    """
+    settings = get_settings()
+    markets = [m.strip().upper() for m in (market or settings.market).split(",") if m.strip()]
+    currency_note = (
+        f"Precios en {currency}" if currency else "moneda no especificada — asumida consistente entre costo y precio de venta"
+    )
+    apply_migrations()
+    session = get_session()
+    try:
+        path = build_product_report(
+            niche, markets, session, product_description=product,
+            cost_price=cost_price, target_price=target_price, currency_note=currency_note,
+        )
+        console.print(f"[green]Análisis generado:[/green] {path}")
     finally:
         session.close()
 

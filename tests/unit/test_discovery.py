@@ -49,6 +49,17 @@ def test_classify_subniche_no_match():
     assert confidence == 0.0
 
 
+def test_classify_subniche_tolerates_singular_plural_mismatch():
+    """Regression test: niches.yaml stores seeds plural ("chaquetas"), but a user
+    describing a product to sell writes singular ("chaqueta rompevientos unisex") — a
+    plain substring check never matched either direction (found via product_viability.py,
+    2026-08-14)."""
+    seeds = {"chaquetas": ["chaquetas"]}
+    subniche, confidence = classify_subniche("chaqueta rompevientos unisex, tela impermeable", seeds)
+    assert subniche == "chaquetas"
+    assert confidence > 0
+
+
 def test_classify_subniche_empty_text():
     subniche, confidence = classify_subniche("", {"vestidos": ["vestido"]})
     assert subniche is None
