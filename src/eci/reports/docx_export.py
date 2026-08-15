@@ -136,7 +136,7 @@ def build_docx(
     # ---------- Cover ----------
     title = doc.add_paragraph()
     title.alignment = WD_ALIGN_PARAGRAPH.LEFT
-    run = title.add_run("📚 ECI Suite — Biblioteca de Referentes")
+    run = title.add_run("📚 Radar de Ecommerce — Biblioteca de Referentes")
     run.bold = True
     run.font.size = Pt(11)
     run.font.color.rgb = _GOLD

@@ -1,4 +1,4 @@
-"""ECI Suite — the live web dashboard (operator, 2026-08-14: "necesito que sea funcional...
+"""Radar de Ecommerce — the live web dashboard (operator, 2026-08-14: "necesito que sea funcional...
 en localhost o en un dash... una aplicación... 100% funcional sin errores").
 
 Everything here is a thin HTTP layer over code that already exists and is already tested
@@ -37,7 +37,7 @@ _env = Environment(
     lstrip_blocks=True,
 )
 
-app = FastAPI(title="ECI Suite")
+app = FastAPI(title="Radar de Ecommerce")
 
 
 def _render(template_name: str, **context) -> HTMLResponse:

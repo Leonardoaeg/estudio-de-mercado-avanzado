@@ -345,16 +345,16 @@ def analyze_product_cmd(
 
 @app.command()
 def serve(
-    port: int = typer.Option(8000, "--port", help="Port to serve the ECI Suite dashboard on"),
+    port: int = typer.Option(8000, "--port", help="Port to serve the Radar de Ecommerce dashboard on"),
     host: str = typer.Option("127.0.0.1", "--host"),
     reload: bool = typer.Option(False, "--reload", help="Auto-reload on code changes (development only)"),
 ):
-    """`eci serve` — starts the live ECI Suite dashboard (niche panels + product viability
+    """`eci serve` — starts the live Radar de Ecommerce dashboard (niche panels + product viability
     analyzer) at http://127.0.0.1:8000. Same data, same logic as the CLI/static reports,
     just served live instead of written to files."""
     import uvicorn
 
-    console.print(f"[green]ECI Suite corriendo en:[/green] http://{host}:{port}")
+    console.print(f"[green]Radar de Ecommerce corriendo en:[/green] http://{host}:{port}")
     uvicorn.run("eci.webapp.app:app", host=host, port=port, reload=reload)
 
 

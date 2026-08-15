@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Analizar producto — ECI Suite</title>
+<title>Analizar producto — Radar de Ecommerce</title>
 <style>
   :root {
     color-scheme: dark;
@@ -20,7 +20,9 @@
   a { color: var(--accent); }
 
   .topbar { display: flex; align-items: center; gap: .8rem; padding: 1rem 1.6rem; background: var(--bg-soft); border-bottom: 1px solid var(--border); }
-  .logo { width: 40px; height: 40px; border-radius: 10px; flex: none; background: radial-gradient(circle at 30% 30%, var(--gold), #7a4e12); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 4px 12px rgba(234,166,62,.25); }
+  .logo { width: 40px; height: 40px; border-radius: 10px; flex: none; background: radial-gradient(circle at 30% 30%, var(--gold), #7a4e12); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 4px 12px rgba(234,166,62,.25); overflow: hidden; }
+  .radar-sweep { transform-origin: 20px 20px; animation: radar-spin 3s linear infinite; }
+  @keyframes radar-spin { to { transform: rotate(360deg); } }
   .brand-name { font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; }
   .brand-sub { color: var(--muted); font-size: .78rem; }
   .topbar a.back { margin-left: auto; font-size: .85rem; color: var(--muted); }
@@ -54,9 +56,9 @@
 </head>
 <body>
 <header class="topbar">
-  <div class="logo">📡</div>
+  <div class="logo"><svg viewBox="0 0 40 40" width="22" height="22"><circle cx="20" cy="20" r="17" stroke="#fff" stroke-width="1.4" opacity=".3" fill="none"/><circle cx="20" cy="20" r="11" stroke="#fff" stroke-width="1.4" opacity=".45" fill="none"/><circle cx="20" cy="20" r="5" stroke="#fff" stroke-width="1.4" opacity=".6" fill="none"/><g class="radar-sweep"><path d="M20 20 L20 3 A17 17 0 0 1 34.7 11.5 Z" fill="url(#rs)"/></g><circle cx="27" cy="12" r="1.6" fill="#2dd4ee"/><circle cx="20" cy="20" r="1.4" fill="#201400"/><defs><linearGradient id="rs" x1="20" y1="20" x2="34.7" y2="11.5" gradientUnits="userSpaceOnUse"><stop stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs></svg></div>
   <div>
-    <div class="brand-name">ECI Suite</div>
+    <div class="brand-name">Radar de Ecommerce</div>
     <div class="brand-sub">Análisis de Viabilidad de Producto</div>
   </div>
   <a class="back" href="/">← Panel de mercado</a>
